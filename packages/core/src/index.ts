@@ -11,12 +11,8 @@ export * from './Types';
  * The configuration object outlining how an accessible visualization should be rendered based on a {@link OlliVisSpec}.
  */
 export type OlliConfigOptions = {
-<<<<<<< HEAD
     renderType?: 'tree' | 'table',
     onFocus?: (elem: HTMLElement) => void
-=======
-    renderType?: 'tree' | 'table'
->>>>>>> 9f7f00a (export OlliConfigOptions type)
 }
 
 /**
