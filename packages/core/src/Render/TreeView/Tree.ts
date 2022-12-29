@@ -24,13 +24,12 @@ export class Tree {
     domNode: any;
     treeItems: TreeItem[];
     rootTreeItem!: TreeItem;
+    onFocus?: (el: HTMLElement) => void;
 
-    constructor(node: HTMLElement) {
-
+    constructor(node: HTMLElement, onFocus?: (el: HTMLElement) => void) {
         this.domNode = node;
-
         this.treeItems = [];
-
+        this.onFocus = onFocus;
     }
 
     init(): void {
@@ -72,6 +71,11 @@ export class Tree {
               ti.domNode.tabIndex = 0;
               ti.domNode.focus();
               ti.domNode.setAttribute('aria-selected', 'true');
+
+              if (this.onFocus) {
+                this.onFocus(ti.domNode);
+              }
+
             } else {
               ti.domNode.tabIndex = -1;
               ti.domNode.setAttribute('aria-selected', 'false');

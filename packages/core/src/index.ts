@@ -3,15 +3,16 @@ import { renderTable } from "./Render/Table"
 import { Tree } from "./Render/TreeView/Tree"
 import { renderTree } from "./Render/TreeView"
 import { olliVisSpecToTree } from "./Structure"
-import { AccessibilityTree } from "./Structure/Types"
+import { AccessibilityTree, AccessibilityTreeNode } from "./Structure/Types"
 
 export * from './Types';
 
 /**
  * The configuration object outlining how an accessible visualization should be rendered based on a {@link OlliVisSpec}.
  */
-type OlliConfigOptions = {
-    renderType?: 'tree' | 'table'
+export type OlliConfigOptions = {
+    renderType?: 'tree' | 'table',
+    onFocus?: (elem: HTMLElement) => void
 }
 
 /**
@@ -25,7 +26,8 @@ export function olli(olliVisSpec: OlliVisSpec, config?: OlliConfigOptions): HTML
     htmlRendering.classList.add('olli-vis');
 
     config = {
-        renderType: config?.renderType || 'tree'
+        renderType: config?.renderType || 'tree',
+        onFocus: config?.onFocus
     }
 
     switch (config.renderType) {
@@ -36,7 +38,7 @@ export function olli(olliVisSpec: OlliVisSpec, config?: OlliConfigOptions): HTML
         default:
             const ul = renderTree(tree);
             htmlRendering.appendChild(ul);
-            const t = new Tree(ul);
+            const t = new Tree(ul, config.onFocus);
             t.init();
             document.addEventListener('keypress', (e) => {
                 if (e.key === 't') {
