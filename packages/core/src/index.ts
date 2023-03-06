@@ -11,8 +11,10 @@ export * from './Types';
  * The configuration object outlining how an accessible visualization should be rendered based on a {@link OlliVisSpec}.
  */
 export type OlliConfigOptions = {
-    renderType?: 'tree' | 'table',
+    renderType?: 'tree' | 'table'
     onFocus?: (elem: HTMLElement) => void
+    fieldValueSuffix?: {[field: string]: string}
+    fieldLabels?: {[field: string]: string}
 }
 
 /**
@@ -26,9 +28,11 @@ export function olli(olliVisSpec: OlliVisSpec, config?: OlliConfigOptions): HTML
     htmlRendering.classList.add('olli-vis');
 
     config = {
-        renderType: config?.renderType || 'tree',
-        onFocus: config?.onFocus
+        ...config,
+        renderType: config?.renderType || 'tree'
     }
+
+    console.log(config);
 
     switch (config.renderType) {
         case ("table"):
@@ -36,7 +40,7 @@ export function olli(olliVisSpec: OlliVisSpec, config?: OlliConfigOptions): HTML
             break;
         case ('tree'):
         default:
-            const ul = renderTree(tree);
+            const ul = renderTree(tree, config);
             htmlRendering.appendChild(ul);
             const t = new Tree(ul, config.onFocus);
             t.init();

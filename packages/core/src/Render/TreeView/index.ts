@@ -1,5 +1,6 @@
 // Adapted from: https://w3c.github.io/aria-practices/examples/treeview/treeview-1/treeview-1b.html
 
+import { OlliConfigOptions } from "../..";
 import { AccessibilityTree, AccessibilityTreeNode } from "../../Structure/Types";
 import { fmtValue } from "../../utils";
 import "./TreeStyle.css";
@@ -9,8 +10,10 @@ import "./TreeStyle.css";
  * @param node A {@link AccessibilityTreeNode} to generate a navigable tree view from
  * @returns An {@link HTMLElement} ARIA TreeView of the navigable tree view for a visualization
  */
- export function renderTree(tree: AccessibilityTree): HTMLElement {
+ export function renderTree(tree: AccessibilityTree, config?: OlliConfigOptions): HTMLElement {
   const namespace = (Math.random() + 1).toString(36).substring(7);
+
+  console.log('uh', config);
 
   const node = tree.root;
 
@@ -29,12 +32,13 @@ import "./TreeStyle.css";
 
   // childContainer.querySelector('span')?.setAttribute('id', labelId);
 
-  root.appendChild(_renderTree(node, namespace, 1, 1, 1));
+  root.appendChild(_renderTree(node, namespace, 1, 1, 1, config));
   root.querySelector('span')?.setAttribute('id', labelId);
 
   return root;
 
-  function _renderTree(node: AccessibilityTreeNode, namespace: string, level: number, posinset: number, setsize: number): HTMLElement {
+  function _renderTree(node: AccessibilityTreeNode, namespace: string, level: number, posinset: number, setsize: number, config?: OlliConfigOptions): HTMLElement {
+    console.log('ok', config);
     const item = document.createElement('li');
     item.setAttribute('role', 'treeitem');
     item.setAttribute('aria-level', String(level));
@@ -63,11 +67,11 @@ import "./TreeStyle.css";
       childContainer.setAttribute('role', 'group');
 
       if (dataChildren.length) {
-        childContainer.appendChild(createDataTable(dataChildren, level + 1));
+        childContainer.appendChild(createDataTable(dataChildren, level + 1, config));
       }
       else {
         treeChildren.forEach((n, index, array) => {
-          childContainer.appendChild(_renderTree(n, namespace, level + 1, index + 1, array.length));
+          childContainer.appendChild(_renderTree(n, namespace, level + 1, index + 1, array.length, config));
         })
       }
       item.appendChild(childContainer);
@@ -77,7 +81,7 @@ import "./TreeStyle.css";
     return item;
   }
 
-  function createDataTable(dataNodes: AccessibilityTreeNode[], level: number) {
+  function createDataTable(dataNodes: AccessibilityTreeNode[], level: number, config?: OlliConfigOptions) {
     const table = document.createElement("table");
     table.setAttribute('aria-label', `Table with ${dataNodes.length} rows`);
     table.setAttribute('aria-level', String(level));
@@ -91,7 +95,7 @@ import "./TreeStyle.css";
     dataNodes[0].tableKeys?.forEach((key: string) => {
       const th = document.createElement("th");
       th.setAttribute('scope', 'col');
-      th.innerText = key
+      th.innerText = config?.fieldLabels ? (config.fieldLabels?.[key] || key) : key
       theadtr.appendChild(th);
     });
 
@@ -104,10 +108,11 @@ import "./TreeStyle.css";
 
     dataNodes.forEach((node) => {
       const dataRow = document.createElement("tr")
-      dataRow.setAttribute('aria-label', `${node.tableKeys?.map(key => `${key}: ${fmtValue(node.selected[0][key])}`).join(', ')}`);
+      dataRow.setAttribute('aria-label', `${node.tableKeys?.map(key => `${key}: ${fmtValue(node.selected[0][key], config?.fieldValueSuffix?.[key])}`).join(', ')}`);
       node.tableKeys?.forEach((key: string) => {
         const td = document.createElement("td")
-        const value = fmtValue(node.selected[0][key]);
+        const value = fmtValue(node.selected[0][key], config?.fieldValueSuffix?.[key]);
+        console.log(config?.fieldValueSuffix?.[key], config, key);
         td.innerText = value;
         dataRow.appendChild(td);
       })

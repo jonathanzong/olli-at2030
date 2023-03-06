@@ -72,7 +72,16 @@ function render() {
 
     OlliAdapters.HighchartsAdapter(spec).then(olliVisSpec => {
       console.log('olliVisSpec', olliVisSpec)
-      document.getElementById("at2030-olli").replaceChildren(olli(olliVisSpec))
+      document.getElementById("at2030-olli").replaceChildren(olli(olliVisSpec, {
+        fieldValueSuffix: {
+          "y": "%"
+        },
+        fieldLabels: {
+          "categories": "Study",
+          "y": "Percentage",
+          "name": "Status"
+        }
+      }))
     })
   }
 
@@ -94,7 +103,7 @@ function createData(filteredData) {
             {
                 "data": series1,
                 "color": "#440154",
-                "name": "Met"
+                "name": window.selectVals[NUM_TYPE]
             },
             {
                 "data": series2,
