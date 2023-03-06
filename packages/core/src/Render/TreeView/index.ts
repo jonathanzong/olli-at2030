@@ -108,10 +108,10 @@ import "./TreeStyle.css";
 
     dataNodes.forEach((node) => {
       const dataRow = document.createElement("tr")
-      dataRow.setAttribute('aria-label', `${node.tableKeys?.map(key => `${key}: ${fmtValue(node.selected[0][key], config?.fieldValueSuffix?.[key])}`).join(', ')}`);
+      dataRow.setAttribute('aria-label', `${node.tableKeys?.map(key => `${key}: ${fmtValue(node.selected[0][key], key, config)}`).join(', ')}`);
       node.tableKeys?.forEach((key: string) => {
         const td = document.createElement("td")
-        const value = fmtValue(node.selected[0][key], config?.fieldValueSuffix?.[key]);
+        const value = fmtValue(node.selected[0][key], key, config);
         console.log(config?.fieldValueSuffix?.[key], config, key);
         td.innerText = value;
         dataRow.appendChild(td);
