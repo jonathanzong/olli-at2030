@@ -3,9 +3,26 @@
 
 <script src="{{site.baseurl}}/lib/vega@5.js"></script>
 <script src="{{site.baseurl}}/lib/vega-lite@5.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/arquero@latest"></script>
 
 <script type="text/javascript" src="{{site.baseurl}}/olli/adapters.js"></script>
 <script type="text/javascript" src="{{site.baseurl}}/olli/olli.js"></script>
 
 <script src="./main.js"></script>
+
+<div id="at2030-selects">
+  <label for="ap-type">Ap type</label>
+  <select id="ap-type"></select>
+  <br/>
+
+  <label for="outcome-def">Outcome def</label>
+  <select id="outcome-def"></select>
+  <br/>
+
+  <label for="denom-def">Denom def</label>
+  <select id="denom-def"></select>
+</div>
+
+<br/>
+
 <div id="at2030-olli"></div>

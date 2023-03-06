@@ -6,13 +6,24 @@ import * as Highcharts from 'highcharts';
 */
 
 export const HighchartsAdapter: VisAdapter<Highcharts.Options> = async (highchartsSpec: Highcharts.Options): Promise<OlliVisSpec> => {
-    return new Promise(function(resolve, reject) {
-        document.addEventListener("DOMContentLoaded", function(event) {
-            const div = document.createElement('div');
-            const highchartsOutput: Highcharts.Chart = Highcharts.chart(div, highchartsSpec);
-            resolve(toChart(highchartsSpec, highchartsOutput));
-         });
-      });
+    if (/complete|interactive|loaded/.test(document.readyState)) {
+        // In case the document has finished parsing, document's readyState will
+        // be one of "complete", "interactive" or (non-standard) "loaded".
+        const div = document.createElement('div');
+        const highchartsOutput: Highcharts.Chart = Highcharts.chart(div, highchartsSpec);
+        return toChart(highchartsSpec, highchartsOutput);
+    } else {
+        // The document is not ready yet, so wait for the DOMContentLoaded event
+        return new Promise(function(resolve, reject) {
+            console.log('sup')
+            document.addEventListener("DOMContentLoaded", function() {
+                console.log('eh')
+                const div = document.createElement('div');
+                const highchartsOutput: Highcharts.Chart = Highcharts.chart(div, highchartsSpec);
+                resolve(toChart(highchartsSpec, highchartsOutput));
+            });
+        });
+    }
 }
 
 // function toFacetedChart(highchartsSpec: Highcharts.Options, highchartsOutput: Highcharts.Chart): FacetedChart {
