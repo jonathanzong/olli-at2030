@@ -103,12 +103,12 @@ function createData(filteredData) {
             {
                 "data": series1,
                 "color": "#440154",
-                "Status": window.selectVals[NUM_TYPE]
+                "name": window.selectVals[NUM_TYPE]
             },
             {
                 "data": series2,
                 "color": "#fde725",
-                "Status": not_label(window.selectVals[NUM_TYPE])
+                "name": not_label(window.selectVals[NUM_TYPE])
             }
         ],
         "categories": filteredData.derive({category: (d) => d.Citation + ': ' + d.Country}).array('category')

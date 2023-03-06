@@ -1,5 +1,6 @@
 import { VisAdapter, OlliVisSpec, FacetedChart, Chart, Legend, OlliMark, OlliDataset } from "olli";
 import * as Highcharts from 'highcharts';
+import { title } from "vega-lite/build/src/channeldef";
 
 /*
     NOTE: this Highcharts Adapter is an initial prototype and is currently overfit to one specific example.
@@ -44,7 +45,8 @@ function toChart(highchartsSpec: Highcharts.Options, highchartsOutput: Highchart
         {
             type: 'discrete',
             values: highchartsOutput.legend.allItems.map(item => item.name),
-            field: 'name' // TODO hardcoded lol
+            field: 'name', // TODO hardcoded lol,
+            title: 'Status' // TODO lmao
         }
     ];
 
